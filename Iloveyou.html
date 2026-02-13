@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I wanna be yours</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #ff6b81;
+    }
+
+    /* Heart Zoom Transition */
+    .transition {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ff6b81;
+      z-index: 10;
+      animation: zoomHeart 2.5s ease-in-out forwards;
+    }
+
+    .heart {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      background: #ff1744;
+      transform: rotate(-45deg);
+      animation: pulse 1.5s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: #ff1744;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -20px; left: 0; }
+    .heart::after { left: 20px; top: 0; }
+
+    @keyframes zoomHeart {
+      from { transform: scale(1); }
+      to { transform: scale(80); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-45deg) scale(1.1); }
+    }
+
+    /* Main Content */
+    .content {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #ff1744;
+      color: white;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .glow {
+      font-size: 3rem;
+      text-shadow: 0 0 10px white, 0 0 20px pink, 0 0 40px hotpink;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeIn 2.5s ease forwards;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    button {
+      font-size: 1.2rem;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    #yes {
+      background: white;
+      color: #ff1744;
+      animation: fadeIn 1.2s ease forwards;
+      animation-delay: 1.8s;
+    }
+
+    #no {
+      background: #ff8fa3;
+      color: white;
+      position: relative;
+      animation: fadeIn 1.2s ease forwards;
+      animation-delay: 2.2s;
+    }
+
+    /* Date Screen */
+    .date {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #ff1744;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+    }
+
+    .small-heart {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 20px;
+      background: #ff8fa3;
+      transform: rotate(-45deg);
+      position: relative;
+    }
+
+    .small-heart::before,
+    .small-heart::after {
+      content: '';
+      width: 60px;
+      height: 60px;
+      background: #ff8fa3;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .small-heart::before { top: -30px; left: 0; }
+    .small-heart::after { left: 30px; top: 0; }
+
+    .date h1 {
+      font-size: 2.5rem;
+    }
+
+    .floating-hearts {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .floating-hearts span {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      transform: rotate(-45deg);
+      animation: floatUp 8s linear infinite;
+      opacity: 0.7;
+    }
+
+    .floating-hearts span::before,
+    .floating-hearts span::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+    }
+
+    .floating-hearts span::before { top: -10px; left: 0; }
+    .floating-hearts span::after { left: 10px; top: 0; }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh) rotate(-45deg); }
+      to { transform: translateY(-100vh) rotate(-45deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="bg-music" autoplay loop>
+    <source src="YOUR_MP3_FILE_HERE.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="transition">
+    <div class="heart"></div>
+  </div>
+
+  <div class="content">
+    <div class="glow">Will you be my valentine?</div>
+    <div class="buttons">
+      <button id="yes">Yes</button>
+      <button id="no">No</button>
+    </div>
+  </div>
+
+  <div class="date">
+    <div class="floating-hearts"></div>
+    <div class="small-heart"></div>
+    <h1 class="glow">its a date bb :))</h1>
+  </div>
+
+  <script>
+    const transition = document.querySelector('.transition');
+    const content = document.querySelector('.content');
+    const dateScreen = document.querySelector('.date');
+    const noBtn = document.getElementById('no');
+    const yesBtn = document.getElementById('yes');
+
+    setTimeout(() => {
+      transition.style.display = 'none';
+      content.style.display = 'flex';
+    }, 2500);
+
+    function moveNoButton() {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    }
+
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('click', moveNoButton);
+
+    yesBtn.addEventListener('click', () => {
+      content.style.display = 'none';
+      dateScreen.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>
